@@ -80,7 +80,7 @@ describe('attached deposit tests', () => {
     log('Initial account balance: ' + Context.accountBalance.toString());
 
     addMessage('hello world');
-    VMContext.setAttached_deposit(u128.from('10'));
+    VMContext.setAttached_deposit(u128.from('20'));
 
     log('Attached deposit: 10');
     log('Account balance after deposit: ' + Context.accountBalance.toString());
