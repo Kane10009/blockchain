@@ -1,93 +1,132 @@
-import { addMessage, getMessages } from '../main';
-import { PostedMessage, messages } from '../model';
-import { VMContext, Context, u128 } from 'near-sdk-as';
+// import { addMessage, getMessages } from '../main';
+// import { PostedMessage, messages } from '../model';
 
-function createMessage(text: string): PostedMessage {
-  return new PostedMessage(text);
-}
+import { clean, getBooks, getExistedBooks, getSuggestedBooks } from '../main';
+import { suggestBook, changeState, upvoteToBuy, downvoteToBuy } from '../main';
+import { getReviews, addReview, editReview, deleteReview, upvoteReview, downvoteReview } from '../main';
 
-const message = createMessage('hello world');
+import { books, reviews } from '../main';
+import { BOOK_STATE_SUGGESTED, BOOK_STATE_EXISTED } from '../model';
 
-describe('message tests', () => {
-  afterEach(() => {
-    while(messages.length > 0) {
-      messages.pop();
-    }
-  });
+import { VMContext, Context, u128, logging } from 'near-sdk-as';
 
-  it('adds a message', () => {
-    addMessage('hello world');
-    expect(messages.length).toBe(
-      1,
-      'should only contain one message'
-    );
-    expect(messages[0]).toStrictEqual(
-      message,
-      'message should be "hello world"'
-    );
-  });
+const book1Name = "book 1";
+const book1Intro = "intro for book 1";
+const book1Author = "author book 1";
 
-  it('adds a premium message', () => {
-    VMContext.setAttached_deposit(u128.from('10000000000000000000000'));
-    addMessage('hello world');
-    const messageAR = getMessages();
-    expect(messageAR[0].premium).toStrictEqual(true,
-      'should be premium'
-    );
-  });
+const book1Review1 = "book1: review 1";
+const book1Review1Edited = "book1: review 1 edited";
+const book2Review1 = "book1: review 2";
 
-  it('retrieves messages', () => {
-    addMessage('hello world');
-    const messagesArr = getMessages();
-    expect(messagesArr.length).toBe(
-      1,
-      'should be one message'
-    );
-    expect(messagesArr).toIncludeEqual(
-      message,
-      'messages should include:\n' + message.toJSON()
-    );
-  });
+const book2Name = "book 2";
+const book2Intro = "intro for book 2";
+const book2Author = "author book 2";
 
-  it('only show the last 10 messages', () => {
-    addMessage('hello world');
-    const newMessages: PostedMessage[] = [];
-    for(let i: i32 = 0; i < 10; i++) {
-      const text = 'message #' + i.toString();
-      newMessages.push(createMessage(text));
-      addMessage(text);
-    }
-    const messages = getMessages();
-    log(messages.slice(7, 10));
-    expect(messages).toStrictEqual(
-      newMessages,
-      'should be the last ten messages'
-    );
-    expect(messages).not.toIncludeEqual(
-      message,
-      'shouldn\'t contain the first element'
-    );
-  });
-});
-
-describe('attached deposit tests', () => {
+describe('book test', () => {
   beforeEach(() => {
-    VMContext.setAttached_deposit(u128.fromString('0'));
-    VMContext.setAccount_balance(u128.fromString('0'));
+    clean();
   });
 
-  it('attaches a deposit to a contract call', () => {
-    log('Initial account balance: ' + Context.accountBalance.toString());
+  it('suggestBook a book', () => {
+    suggestBook(book1Name, book1Intro, book1Author);
 
-    addMessage('hello world');
-    VMContext.setAttached_deposit(u128.from('20'));
-
-    log('Attached deposit: 10');
-    log('Account balance after deposit: ' + Context.accountBalance.toString());
-
-    expect(Context.accountBalance.toString()).toStrictEqual(
-      '10',
-      'balance should be 10'
-    );
+    expect(books).toHaveLength(1, 'should only contain one book')
+    expect(books.get(book1Name)).toBeTruthy(book1Name);
   });
+
+  it('clean all book', () => {
+    suggestBook(book1Name, book1Intro, book1Author);
+    addReview(book1Name, book1Review1);
+    clean();
+
+    expect(books).toHaveLength(0, 'should have no book')
+  });
+
+  it('changeState book', () => {
+    suggestBook(book1Name, book1Intro, book1Author);
+
+    changeState(book1Name, BOOK_STATE_EXISTED);
+    expect(getBooks()[0].state).toBe(BOOK_STATE_EXISTED, "state should be BOOK_STATE_EXISTED");
+
+    changeState(book1Name, BOOK_STATE_SUGGESTED);
+    expect(getBooks()[0].state).toBe(BOOK_STATE_SUGGESTED, "state should be BOOK_STATE_SUGGESTED");
+  });
+
+  it('upvote a book', () => {
+    suggestBook(book1Name, book1Intro, book1Author);
+
+    upvoteToBuy(book1Name);
+    expect(getBooks()[0].upvoteToBuy.length).toBe(1, "book 1 should have 1 upvote");
+  });
+
+  it('downvote a book', () => {
+    suggestBook(book1Name, book1Intro, book1Author);
+
+    downvoteToBuy(book1Name);
+    expect(getBooks()[0].downvoteToBuy.length).toBe(1, "book 1 should have 1 downvote");
+  });
+
+  it('add Review for a book', () => {
+    suggestBook(book1Name, book1Intro, book1Author);
+    addReview(book1Name, book1Review1);
+
+    expect(getReviews(book1Name).length).toBe(1, "book 1 should have 1 review");
+  });
+
+  it('edit Review for a book', () => {
+    suggestBook(book1Name, book1Intro, book1Author);
+    addReview(book1Name, book1Review1);
+    editReview(getReviews(book1Name).at(0).id, book1Review1Edited);
+
+    expect(getReviews(book1Name).at(0).content).toBe(book1Review1Edited, "book 1 should have 1 review edited");
+  });
+
+  it('delete Review for a book', () => {
+    suggestBook(book1Name, book1Intro, book1Author);
+    addReview(book1Name, book1Review1);
+    deleteReview(getReviews(book1Name).at(0).id);
+
+    expect(reviews.length).toBe(0, "book 1 should have 0 review");
+  });
+
+  it('upvote Review of a book', () => {
+    suggestBook(book1Name, book1Intro, book1Author);
+    addReview(book1Name, book1Review1);
+    const review = getReviews(book1Name).at(0);
+    upvoteReview(review.id);
+
+    const reviewUpdated = getReviews(book1Name).at(0);
+    expect(reviewUpdated.upvoteReview.length).toBe(1, "review 1 should have 1 upvote");
+  });
+
+  it('downvote Review of a book', () => {
+    suggestBook(book1Name, book1Intro, book1Author);
+    addReview(book1Name, book1Review1);
+    downvoteReview(getReviews(book1Name).at(0).id);
+
+    expect(getReviews(book1Name).at(0).downvoteReview.length).toBe(1, "review 1 should have 1 downvote");
+  });
+
 });
+
+// describe('attached deposit tests', () => {
+//   beforeEach(() => {
+//     VMContext.setAttached_deposit(u128.fromString('0'));
+//     VMContext.setAccount_balance(u128.fromString('0'));
+//   });
+
+//   it('attaches a deposit to a contract call', () => {
+//     log('Initial account balance: ' + Context.accountBalance.toString());
+
+//     addMessage('hello world');
+//     VMContext.setAttached_deposit(u128.from('20'));
+
+//     log('Attached deposit: 10');
+//     log('Account balance after deposit: ' + Context.accountBalance.toString());
+
+//     expect(Context.accountBalance.toString()).toStrictEqual(
+//       '10',
+//       'balance should be 10'
+//     );
+//   });
+// });

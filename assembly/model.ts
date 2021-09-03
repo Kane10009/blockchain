@@ -1,10 +1,7 @@
-import { context, u128, PersistentVector, PersistentUnorderedMap } from "near-sdk-as";
-import { Array } from "array";
+import { context, u128, PersistentVector, logging } from "near-sdk-as";
 
 export const BOOK_STATE_SUGGESTED: i32 = 0;
 export const BOOK_STATE_EXISTED: i32 = 1;
-
-export const books = new PersistentUnorderedMap<string, Book>("book-sm")
 
 /** 
  * books that suggested by user
@@ -22,8 +19,6 @@ export class Book {
   upvoteToBuy: string[]; // upvote for buying
   downvoteToBuy: string[]; // downvote for buying
 
-  reviews: PersistentUnorderedMap<i32, Review>; // may be multiple review for a book
-
   constructor(name: string, intro: string, auth: string) {
     this.name = name;
     this.introduction = intro;
@@ -33,15 +28,13 @@ export class Book {
 
     this.state = BOOK_STATE_SUGGESTED;
 
-    this.reviews = new PersistentUnorderedMap<i32, Review>("review-sm");
+    this.upvoteToBuy = [];
+    this.downvoteToBuy = [];
   }
 
-  public changeState(newState: i32): void {
+  public changeState(newState: i32): Book {
     this.state = newState;
-  }
-
-  public addReview(review: Review): void {
-    this.reviews.set(review.id, review);
+    return this;
   }
 
   //#region : upvote/downvote
@@ -53,22 +46,28 @@ export class Book {
     return true;
   }
 
-  public upvote(): void {
+  public upvote(): Book {
+    logging.log("upvote");
     if (!this.isUpvoted()) {
+      logging.log("! isUpvoted: ".concat(context.sender));
       this.upvoteToBuy.push(context.sender);
+      logging.log("length: ".concat(this.upvoteToBuy.length.toString()));
     }
 
     // if downvote before -> delete it in downvoteToBuy
     this.removeDownvote(context.sender);
+    return this;
   }
 
-  public downvote(): void {
+  public downvote(): Book {
     if (!this.isDownvoted()) {
-      this.upvoteToBuy.push(context.sender);
+      this.downvoteToBuy.push(context.sender);
     }
 
     // if upvote before -> delete it in upvoteToBuy
     this.removeUpvote(context.sender);
+
+    return this;
   }
 
   public isDownvoted(): boolean {
@@ -81,6 +80,9 @@ export class Book {
 
   private removeDownvote(author: string): void {
     assert(author != null, "author need != null");
+
+    logging.log("removeDownvote");
+
     const index = this.downvoteToBuy.indexOf(context.sender);
     if (index > -1) {
       this.downvoteToBuy = this.filter(author, this.downvoteToBuy);
@@ -111,23 +113,28 @@ export class Book {
 @nearBindgen
 export class Review {
   id: i32;
+  name: string;
   reviewer: string;
   content: string;
-  upvote: string[];
-  downvote: string[];
+  upvoteReview: string[];
+  downvoteReview: string[];
 
   reward: i32;
 
-  constructor(content: string, id: i32) {
+  constructor(name: string, content: string, id: i32) {
     this.reviewer = context.sender;
     this.id = id;
+    this.name = name;
     this.content = content;
 
     this.reward = 0;
+
+    this.upvoteReview = [];
+    this.downvoteReview = [];
   }
 
   public isUpvoted(): boolean {
-    const index = this.upvote.indexOf(context.sender);
+    const index = this.upvoteReview.indexOf(context.sender);
     if (index == -1) {
       return false;
     }
@@ -135,29 +142,31 @@ export class Review {
   }
 
   public isDownvoted(): boolean {
-    const index = this.downvote.indexOf(context.sender);
+    const index = this.downvoteReview.indexOf(context.sender);
     if (index == -1) {
       return false;
     }
     return true;
   }
 
-  public upVote(): void {
+  public upVote(): Review {
     if (!this.isUpvoted()) {
-      this.upvote.push(context.sender);
+      this.upvoteReview.push(context.sender);
     }
 
     // if downvote before -> delete it in downvoteToBuy
     this.removeDownvote(context.sender);
+    return this;
   }
 
-  public downVote(): void {
+  public downVote(): Review {
     if (!this.isDownvoted()) {
-      this.downvote.push(context.sender);
+      this.downvoteReview.push(context.sender);
     }
 
     // if downvote before -> delete it in downvoteToBuy
     this.removeUpvote(context.sender);
+    return this;
   }
 
   private filter(val: string, array: string[]): string[] {
@@ -172,16 +181,16 @@ export class Review {
   }
 
   private removeDownvote(author: string): void {
-    const index = this.downvote.indexOf(context.sender);
+    const index = this.downvoteReview.indexOf(context.sender);
     if (index > -1) {
-      this.downvote = this.filter(author, this.downvote);
+      this.downvoteReview = this.filter(author, this.downvoteReview);
     }
   }
 
   private removeUpvote(author: string): void {
-    const index = this.upvote.indexOf(context.sender);
+    const index = this.upvoteReview.indexOf(context.sender);
     if (index > -1) {
-      this.upvote = this.filter(author, this.upvote);
+      this.upvoteReview = this.filter(author, this.upvoteReview);
     }
   }
 
