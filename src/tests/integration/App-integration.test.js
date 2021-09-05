@@ -4,9 +4,9 @@
 
 import 'regenerator-runtime/runtime';
 
-let near;
-let contract;
-let accountId;
+// let near;
+// let contract;
+// let accountId;
 
 // beforeAll(async function() {
 //   near = await nearlib.connect(nearConfig);

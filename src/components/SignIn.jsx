@@ -4,18 +4,14 @@ export default function SignIn() {
   return (
     <>
       <p>
-          This app demonstrates a key element of NEAR’s UX: once an app has
-          permission to make calls on behalf of a user (that is, once a user
-          signs in), the app can make calls to the blockhain for them without
-          prompting extra confirmation. So you’ll see that if you don’t
-          include a donation, your message gets posted right to the guest book.
+          This is the demo app that used to get certificated of the course "NEAR Certified Developer Level 1" (NCD)
+          This course is an opportunity for web developers to earn a Certificate of Completion that represents the ability 
+          to design, develop, test and deploy smart contracts on the NEAR platform – NEAR Certified Developer (NCD)
       </p>
       <p>
-          But if you do add a donation, then NEAR will double-check that
-          you’re ok with sending money to this app.
-      </p>
-      <p>
-          Go ahead and sign in to try it out!
+          About the NEAR book store
+          The idea about this project is a comunity book store where all will share money to buy book. 
+          Community will together vote to buy book, share the reviews ...
       </p>
     </>
   );
