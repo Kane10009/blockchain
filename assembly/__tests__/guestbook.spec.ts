@@ -1,9 +1,9 @@
 // import { addMessage, getMessages } from '../main';
 // import { PostedMessage, messages } from '../model';
 
-import { clean, getBooks, getExistedBooks, getSuggestedBooks } from '../main';
-import { suggestBook, changeState, upvoteToBuy, downvoteToBuy } from '../main';
-import { getReviews, addReview, editReview, deleteReview, upvoteReview, downvoteReview } from '../main';
+import { clean, getBooks } from '../main';
+import { suggestBook, upvote } from '../main';
+import { getReviews, addReview, editReview, deleteReview, upvoteReview } from '../main';
 
 import { books, reviews } from '../main';
 import { BOOK_STATE_SUGGESTED, BOOK_STATE_EXISTED } from '../model';
@@ -42,28 +42,11 @@ describe('book test', () => {
     expect(books).toHaveLength(0, 'should have no book')
   });
 
-  it('changeState book', () => {
-    suggestBook(book1Name, book1Intro, book1Author);
-
-    changeState(book1Name, BOOK_STATE_EXISTED);
-    expect(getBooks()[0].state).toBe(BOOK_STATE_EXISTED, "state should be BOOK_STATE_EXISTED");
-
-    changeState(book1Name, BOOK_STATE_SUGGESTED);
-    expect(getBooks()[0].state).toBe(BOOK_STATE_SUGGESTED, "state should be BOOK_STATE_SUGGESTED");
-  });
-
   it('upvote a book', () => {
     suggestBook(book1Name, book1Intro, book1Author);
 
-    upvoteToBuy(book1Name);
-    expect(getBooks()[0].upvoteToBuy.length).toBe(1, "book 1 should have 1 upvote");
-  });
-
-  it('downvote a book', () => {
-    suggestBook(book1Name, book1Intro, book1Author);
-
-    downvoteToBuy(book1Name);
-    expect(getBooks()[0].downvoteToBuy.length).toBe(1, "book 1 should have 1 downvote");
+    upvote(book1Name);
+    expect(getBooks()[0].upvotes.length).toBe(1, "book 1 should have 1 upvote");
   });
 
   it('add Review for a book', () => {
@@ -96,15 +79,7 @@ describe('book test', () => {
     upvoteReview(review.id);
 
     const reviewUpdated = getReviews(book1Name).at(0);
-    expect(reviewUpdated.upvoteReview.length).toBe(1, "review 1 should have 1 upvote");
-  });
-
-  it('downvote Review of a book', () => {
-    suggestBook(book1Name, book1Intro, book1Author);
-    addReview(book1Name, book1Review1);
-    downvoteReview(getReviews(book1Name).at(0).id);
-
-    expect(getReviews(book1Name).at(0).downvoteReview.length).toBe(1, "review 1 should have 1 downvote");
+    expect(reviewUpdated.upvotes.length).toBe(1, "review 1 should have 1 upvote");
   });
 
 });

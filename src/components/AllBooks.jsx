@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Big from 'big.js';
+import BookItem from './BookItem';
 
 export default function AllBooks({ contract, currentUser, nearConfig, wallet }) {
     const [books, setBooks] = useState([]);
@@ -12,9 +13,7 @@ export default function AllBooks({ contract, currentUser, nearConfig, wallet }) 
         <>
             {books.map((book, i) =>
                 <p key={book.name}>
-                    <strong>{book.name}</strong><br />
-                    <strong>{book.auth}</strong><br />
-                    <strong>{book.intro}</strong><br />
+                    <BookItem book={book} contract={contract}/>
                 </p>
             )}
         </>

@@ -20,7 +20,7 @@ async function initContract() {
 
   // Load in account data
   let currentUser;
-  if(walletConnection.getAccountId()) {
+  if (walletConnection.getAccountId()) {
     currentUser = {
       accountId: walletConnection.getAccountId(),
       balance: (await walletConnection.account().state()).amount
@@ -30,11 +30,10 @@ async function initContract() {
   // Initializing our contract APIs by contract name and configuration
   const contract = await new nearAPI.Contract(walletConnection.account(), nearConfig.contractName, {
     // View methods are read-only – they don't modify the state, but usually return some value
-    viewMethods: ['getBooks','getExistedBooks','getSuggestedBooks','getReviews'],
+    viewMethods: ['getBooks', 'getReviews', 'getUpvote'],
     // Change methods can modify the state, but you don't receive the returned value when called
-    changeMethods: ['clean','suggestBook','deletedBook','deleteReviewsOfBook'
-    ,'changeState','upvoteToBuy','downvoteToBuy'
-    ,'addReview','editReview','deleteReview','upvoteReview','downvoteReview'],
+    changeMethods: ['clean', 'suggestBook', 'deletedBook', 'deleteReviewsOfBook'
+      , 'upvote', 'addReview', 'editReview', 'deleteReview','upvoteReview'],
     // Sender is the account ID to initialize transactions.
     // getAccountId() will return empty string if user is still unauthorized
     sender: walletConnection.getAccountId()

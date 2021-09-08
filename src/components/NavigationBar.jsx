@@ -4,9 +4,8 @@ import Big from 'big.js';
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
 import AllBooks from './AllBooks';
-import ExistedBooks from './ExistedBooks';
-import SuggestedBooks from './SuggestedBooks';
 import NewBook from './NewBook';
+import Review from './Review';
 
 export default function NavigationBar({ contract, currentUser, nearConfig, wallet }) {
     return (
@@ -17,19 +16,10 @@ export default function NavigationBar({ contract, currentUser, nearConfig, walle
                         Home
                     </Link>
 
-                    <Link to="/blockchain/existed">
-                        Existed Books
-                    </Link>
-
-                    <Link to="/blockchain/suggested">
-                        Suggested Books
-                    </Link>
-
                     <Link to="/blockchain/add">
                         Add Books
                     </Link>
 
-                    
                     {/* --------------------------------------------------------------- */}
                     <hr />
                     {/* --------------------------------------------------------------- */}
@@ -40,14 +30,18 @@ export default function NavigationBar({ contract, currentUser, nearConfig, walle
                                 nearConfig={nearConfig}
                                 wallet={wallet} />
                         </Route>
-                        <Route path="/blockchain/existed">
-                            <ExistedBooks />
-                        </Route>
-                        <Route path="/blockchain/suggested">
-                            <SuggestedBooks />
-                        </Route>
                         <Route path="/blockchain">
-                            <AllBooks />
+                            <AllBooks contract={contract}
+                                currentUser={currentUser}
+                                nearConfig={nearConfig}
+                                wallet={wallet} />
+                        </Route>
+                        <Route exact
+                                path="/detail/:name">
+                            <Review contract={contract}
+                                currentUser={currentUser}
+                                nearConfig={nearConfig}
+                                wallet={wallet} />
                         </Route>
                     </Switch>
                 </div>

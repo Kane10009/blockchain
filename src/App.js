@@ -8,8 +8,6 @@ import SignIn from './components/SignIn';
 import NavigationBar from './components/NavigationBar';
 import NewBook from './components/NewBook';
 import AllBooks from './components/AllBooks';
-import ExistedBooks from './components/ExistedBooks';
-import SuggestedBooks from './components/SuggestedBooks';
 import BookItem from './components/BookItem';
 
 

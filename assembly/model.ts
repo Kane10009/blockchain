@@ -14,10 +14,7 @@ export class Book {
 
   owner: string; // the first people that public this suggested
 
-  state: i32;
-
-  upvoteToBuy: string[]; // upvote for buying
-  downvoteToBuy: string[]; // downvote for buying
+  upvotes: string[]; // upvote 
 
   constructor(name: string, intro: string, auth: string) {
     this.name = name;
@@ -26,70 +23,30 @@ export class Book {
 
     this.owner = context.sender;
 
-    this.state = BOOK_STATE_SUGGESTED;
-
-    this.upvoteToBuy = [];
-    this.downvoteToBuy = [];
+    this.upvotes = [];
   }
 
-  public changeState(newState: i32): Book {
-    this.state = newState;
-    return this;
-  }
-
-  //#region : upvote/downvote
   public isUpvoted(): boolean {
-    const index = this.upvoteToBuy.indexOf(context.sender);
+    const index = this.upvotes.indexOf(context.sender);
     if (index == -1) {
       return false;
     }
     return true;
   }
 
-  public upvote(): Book {
+  public up(): Book {
     logging.log("upvote");
-    if (!this.isUpvoted()) {
-      logging.log("! isUpvoted: ".concat(context.sender));
-      this.upvoteToBuy.push(context.sender);
-      logging.log("length: ".concat(this.upvoteToBuy.length.toString()));
+    if (this.isUpvoted()) {
+      this.upvotes = this.filterExclude(context.sender, this.upvotes);
+    }else{
+      this.upvotes.push(context.sender);
     }
-
-    // if downvote before -> delete it in downvoteToBuy
-    this.removeDownvote(context.sender);
-    return this;
-  }
-
-  public downvote(): Book {
-    if (!this.isDownvoted()) {
-      this.downvoteToBuy.push(context.sender);
-    }
-
-    // if upvote before -> delete it in upvoteToBuy
-    this.removeUpvote(context.sender);
 
     return this;
   }
 
-  public isDownvoted(): boolean {
-    const index = this.downvoteToBuy.indexOf(context.sender);
-    if (index == -1) {
-      return false;
-    }
-    return true;
-  }
 
-  private removeDownvote(author: string): void {
-    assert(author != null, "author need != null");
-
-    logging.log("removeDownvote");
-
-    const index = this.downvoteToBuy.indexOf(context.sender);
-    if (index > -1) {
-      this.downvoteToBuy = this.filter(author, this.downvoteToBuy);
-    }
-  }
-
-  private filter(val: string, array: string[]): string[] {
+  private filterExclude(val: string, array: string[]): string[] {
     let filtered: string[] = [];
     for (let i = 0; i < array.length; i++) {
       if (val != array[i]) {
@@ -100,12 +57,6 @@ export class Book {
     return filtered;
   }
 
-  private removeUpvote(author: string): void {
-    const index = this.upvoteToBuy.indexOf(context.sender);
-    if (index > -1) {
-      this.upvoteToBuy = this.filter(author, this.upvoteToBuy);
-    }
-  }
   //#endregion 
 
 }
@@ -116,8 +67,7 @@ export class Review {
   name: string;
   reviewer: string;
   content: string;
-  upvoteReview: string[];
-  downvoteReview: string[];
+  upvotes: string[];
 
   reward: i32;
 
@@ -129,20 +79,11 @@ export class Review {
 
     this.reward = 0;
 
-    this.upvoteReview = [];
-    this.downvoteReview = [];
+    this.upvotes= [];
   }
 
   public isUpvoted(): boolean {
-    const index = this.upvoteReview.indexOf(context.sender);
-    if (index == -1) {
-      return false;
-    }
-    return true;
-  }
-
-  public isDownvoted(): boolean {
-    const index = this.downvoteReview.indexOf(context.sender);
+    const index = this.upvotes.indexOf(context.sender);
     if (index == -1) {
       return false;
     }
@@ -150,26 +91,16 @@ export class Review {
   }
 
   public upVote(): Review {
-    if (!this.isUpvoted()) {
-      this.upvoteReview.push(context.sender);
+    if (this.isUpvoted()) {
+      this.upvotes = this.filterExclude(context.sender, this.upvotes);
+    }else{
+      this.upvotes.push(context.sender);
     }
 
-    // if downvote before -> delete it in downvoteToBuy
-    this.removeDownvote(context.sender);
     return this;
   }
 
-  public downVote(): Review {
-    if (!this.isDownvoted()) {
-      this.downvoteReview.push(context.sender);
-    }
-
-    // if downvote before -> delete it in downvoteToBuy
-    this.removeUpvote(context.sender);
-    return this;
-  }
-
-  private filter(val: string, array: string[]): string[] {
+  private filterExclude(val: string, array: string[]): string[] {
     let filtered: string[] = [];
     for (let i = 0; i < array.length; i++) {
       if (val != array[i]) {
@@ -179,21 +110,6 @@ export class Review {
 
     return filtered;
   }
-
-  private removeDownvote(author: string): void {
-    const index = this.downvoteReview.indexOf(context.sender);
-    if (index > -1) {
-      this.downvoteReview = this.filter(author, this.downvoteReview);
-    }
-  }
-
-  private removeUpvote(author: string): void {
-    const index = this.upvoteReview.indexOf(context.sender);
-    if (index > -1) {
-      this.upvoteReview = this.filter(author, this.upvoteReview);
-    }
-  }
-
 }
 
 

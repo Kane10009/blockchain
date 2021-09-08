@@ -12,26 +12,6 @@ export function getBooks(): Book[] {
   return books.values();
 }
 
-export function getExistedBooks(): Book[] {
-  const all = getBooks();
-  return all.filter((book: Book, index: i32, arr: Book[]) => {
-    if (book.state == BOOK_STATE_EXISTED) {
-      return true;
-    }
-    return false;
-  });
-}
-
-export function getSuggestedBooks(): Book[] {
-  const all = getBooks();
-  return all.filter((book: Book, index: i32, arr: Book[]) => {
-    if (book.state == BOOK_STATE_SUGGESTED) {
-      return true;
-    }
-    return false;
-  });
-}
-
 export function suggestBook(name: string, intro: string, auth: string): void {
   assert(!books.contains(name), "this book is suggested before, please check");
 
@@ -58,32 +38,23 @@ function deleteReviewsOfBook(name: string): void {
   }
 }
 
-export function changeState(name: string, state: i32): void {
+export function upvote(name: string): void {
   assert(books.contains(name), "this book is not existed in my store");
   const book = books.get(name);
+  logging.log("upvote: ");
   if (book) {
-    const updated = book.changeState(state);
+    const updated = book.up();
     books.set(updated.name, updated);
   }
 }
 
-export function upvoteToBuy(name: string): void {
-  assert(books.contains(name), "this book is not existed in my store");
-  const book = books.get(name);
-  logging.log("upvoteToBuy: ");
-  if (book) {
-    const updated = book.upvote();
-    books.set(updated.name, updated);
-  }
-}
-
-export function downvoteToBuy(name: string): void {
+export function getUpvote(name: string): i32{
   assert(books.contains(name), "this book is not existed in my store");
   const book = books.get(name);
   if (book) {
-    const updated = book.downvote();
-    books.set(updated.name, updated);
+    return book.upvotes.length
   }
+  return 0;
 }
 
 export function getReviews(name: string): Review[] {
@@ -140,15 +111,6 @@ export function upvoteReview(id: i32): void {
   const review = reviews.get(id);
   if (review != null) {
     const updated = review.upVote();
-    reviews.set(id, updated);
-  }
-}
-
-export function downvoteReview(id: i32): void {
-  assert(reviews.contains(id), "this content is not existed in my store");
-  const review = reviews.get(id);
-  if (review != null) {
-    const updated = review.downVote();
     reviews.set(id, updated);
   }
 }

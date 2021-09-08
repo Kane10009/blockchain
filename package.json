@@ -78,5 +78,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "Near Book Store (refered from \"Guest book\" project)",
+  "main": "as-pect.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kane10009/blockchain.git"
+  },
+  "keywords": [],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/Kane10009/blockchain/issues"
+  },
+  "homepage": "https://github.com/Kane10009/blockchain#readme"
 }
