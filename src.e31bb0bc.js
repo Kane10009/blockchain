@@ -36059,7 +36059,7 @@ function AllBooks({
   const [curentBook, setCurentBook] = (0, _react.useState)(null);
   const [reviews, setReviews] = (0, _react.useState)([]);
   (0, _react.useEffect)(() => {
-    // setReviews([]);
+    setReviews([]);
     console.log('curentBook change', curentBook);
     curentBook && curentBook.name && contract.getReviews({
       name: curentBook.name
@@ -36071,7 +36071,7 @@ function AllBooks({
     contract.getReviews({
       name: 'book 1'
     }).then(c => {
-      // setReviews(c);
+      setReviews(c);
       console.log("review: ", c);
     });
     contract.getBooks().then(b => {
@@ -52783,7 +52783,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36209" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40369" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
