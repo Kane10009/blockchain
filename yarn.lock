@@ -5698,7 +5698,7 @@ jest-environment-node@^26.6.2:
     jest-mock "^26.6.2"
     jest-util "^26.6.2"
 
-jest-environment-node@^27.0.6:
+jest-environment-node@^27.0.6, jest-environment-node@^27.1.1:
   version "27.1.1"
   resolved "https://registry.yarnpkg.com/jest-environment-node/-/jest-environment-node-27.1.1.tgz#97425d4762b2aeab15892ffba08c6cbed7653e75"
   integrity sha512-OEGeZh0PwzngNIYWYgWrvTcLygopV8OJbC9HNb0j70VBKgEIsdZkYhwcFnaURX83OHACMqf1pa9Tv5Pw5jemrg==
