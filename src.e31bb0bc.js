@@ -36361,7 +36361,8 @@ const App = ({
   };
 
   return /*#__PURE__*/_react.default.createElement("main", null, /*#__PURE__*/_react.default.createElement("header", null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, "NEAR Book Store"), /*#__PURE__*/_react.default.createElement("button", {
-    margin: "100"
+    margin: "100",
+    onClick: signOut
   }, "Log out")), currentUser ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null) : /*#__PURE__*/_react.default.createElement("button", {
     onClick: signIn
   }, "Log in")), currentUser ? /*#__PURE__*/_react.default.createElement(_NavigationBar.default, {
@@ -52782,7 +52783,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35907" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45411" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
