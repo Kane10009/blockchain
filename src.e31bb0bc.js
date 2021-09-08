@@ -35906,9 +35906,8 @@ function BookItem({
   }, []);
 
   const onUpvote = e => {
-    e.preventDefault();
-    setCurentbook({ ...book
-    });
+    e.preventDefault(); // setCurentbook({...book})
+
     contract.upvote({
       name: book.name
     }).then(() => {
@@ -36068,18 +36067,15 @@ function AllBooks({
     });
   }, [curentBook]);
   (0, _react.useEffect)(() => {
-    contract.getReviews({
-      name: 'book 1'
-    }).then(c => {
-      setReviews(c);
-      console.log("review: ", c);
-    });
     contract.getBooks().then(b => {
       console.log("book: ", b[0].name);
-      setBooks(b); // contract.getReviews({name: "book 1"}).then(c => {
-      //     setReviews(c);
-      //     console.log("review: ", c)
-      // });
+      setBooks(b);
+      contract.getReviews({
+        name: "book 1"
+      }).then(c => {
+        setReviews(c);
+        console.log("review: ", c);
+      });
     });
   }, []);
 
@@ -52783,7 +52779,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40369" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38985" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
