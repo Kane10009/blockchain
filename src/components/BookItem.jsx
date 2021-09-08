@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Big from 'big.js';
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
-export default function BookItem({ book, contract }) {
+export default function BookItem({ book, contract, setCurentbook }) {
   const [upvote, setupvote] = useState([]);
   useEffect(() => {
     setupvote(book.upvotes.length);
@@ -11,7 +11,7 @@ export default function BookItem({ book, contract }) {
 
   const onUpvote = (e) => {
     e.preventDefault();
-
+    setCurentbook({...book})
     contract.upvote({ name: book.name }
     ).then(() => {
       contract.getUpvote({ name: book.name }).then(number => {
@@ -41,14 +41,14 @@ export default function BookItem({ book, contract }) {
             {book.introduction}
           </div>
           <button onClick={onUpvote}>Upvote({upvote})</button>
-          <Link
+          {/* <Link
             to={{
               pathname: `/detail/${book.name}`,
               state: { frombookitem: book }
             }}
           >
             <button>Review</button>
-          </Link>;
+          </Link>; */}
         </div>
         <div>
           <hr />

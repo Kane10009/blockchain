@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Big from 'big.js';
 import { useLocation, Link } from "react-router-dom";
 
-export default function Review({ contract, currentUser, nearConfig, wallet }) {
-    const { state } = useLocation();
+export default function Review({ contract, currentUser, nearConfig, wallet, reviewItem }) {
+    // const { state } = useLocation();
     const [reviewContent, setReviewContent] = useState([]);
     // const onSubmit = (e) => {
     //     e.preventDefault();
@@ -46,13 +46,13 @@ export default function Review({ contract, currentUser, nearConfig, wallet }) {
     return (
         <div>
             <div class="bookname">
-                {state.frombookitem.name}
+                {reviewItem.name}
             </div>
             <div class="bookauthor">
-                {state.frombookitem.author}
+                {reviewItem.author}
             </div>
             <div class="bookintro">
-                {state.frombookitem.introduction}
+                {reviewItem.introduction}
             </div>
             <textarea name="newReview" cols="100" rows="5" onChange={handleChange}></textarea>
             <button onClick={onAddReview}>Add</button>
