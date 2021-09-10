@@ -3,7 +3,7 @@
 }
 
 html {
-  --bg: #fff;
+  --bg: rgb(144, 171, 182);
   --fg: #25282A;
   --gray: #888;
   --royal: #0072CE;
@@ -23,7 +23,7 @@ html ::selection {
 }
 @media (prefers-color-scheme: dark) {
   html {
-    --bg: #25282A;
+    --bg: rgb(144, 171, 182);
     --fg: #fff;
     --secondary: var(--blue);
   }
@@ -36,7 +36,7 @@ html ::selection {
 body {
   margin: 0 auto;
   padding: 0 1em;
-  max-width: 40em;
+  max-width: 60em;
 }
 
 fieldset {
@@ -63,13 +63,8 @@ label {
 }
 
 button, .highlight {
-  border-radius: 5px;
-  border-color: var(--primary);
-  border: 0.1em solid var(--primary);
-  padding: 0.5em 1em;
-}
-button:hover, button:focus, button:focus-within, .highlight:hover, .highlight:focus, .highlight:focus-within {
-  border-color: var(--secondary);
+  border-color: transparent;
+  text-align: left;
 }
 
 input {
@@ -93,7 +88,7 @@ input[type=number]:hover, input[type=number]:focus {
 
 button, input {
   background: transparent;
-  color: inherit;
+  color: #504d4d;
   cursor: pointer;
   font: inherit;
   outline: none;
@@ -103,12 +98,13 @@ button {
   position: relative;
   transition: top 50ms;
 }
-button:hover, button:focus {
+button:hover {
   top: -1px;
+  color: black;
 }
 button:active {
-  background: var(--secondary);
-  border-color: var(--secondary);
+  background: transparent;
+  border-color: transparent;
   top: 1px;
 }
 
@@ -145,6 +141,100 @@ a:link:hover, a:link:focus, a:link:focus-within, a:visited:hover, a:visited:focu
 
 .bookintro {
   font-size: 16px;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Style the header */
+header {
+  background-color: #f1f1f1;
+  text-align: left;
+  font-size: 25px;
+  color: 777;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+/* Create two columns/boxes that floats next to each other */
+nav {
+  float: left;
+  width: 30%;
+  height: 300px;
+  /* only for demonstration, should be removed */
+  background: #ccc;
+}
+
+/* Style the list inside the menu */
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.content {
+  float: left;
+  width: 100%;
+  background-color: #f1f1f1;
+  height: 300px;
+  /* only for demonstration, should be removed */
+}
+
+/* Clear floats after the columns */
+section::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Style the footer */
+footer {
+  background-color: #f1f1f1;
+  text-align: left;
+  color: 777;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  background-color: #455363;
+}
+
+.top.wrapper > div {
+  flex: 1;
+}
+
+.box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.box2 {
+  background-color: black;
+}
+
+.top-right {
+  background-color: #455363;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+}
+.top-right:hover, .top-right:focus, .top-right:focus-within {
+  border-color: var(--secondary);
+}
+
+.bookItem {
+  background-color: #ddb15e;
+  margin-top: 0px;
+}
+
+.reviewItem {
+  background-color: #a0e280;
+  margin-top: 0px;
+  margin-bottom: 10px;
 }
 
 /*# sourceMappingURL=/global.65e27967.css.map */
