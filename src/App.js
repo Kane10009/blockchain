@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Big from 'big.js';
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 
 import SignIn from './components/SignIn';
 import NavigationBar from './components/NavigationBar';
 import NewBook from './components/NewBook';
 import AllBooks from './components/AllBooks';
 import BookItem from './components/BookItem';
-
 
 const SUGGESTED_DONATION = '0';
 const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
@@ -36,23 +36,16 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
 
   return (
     <main>
-      <header>
-        <div>
-          <h1 >NEAR Book Store</h1>
-          <button margin='100'>Log out</button>
-        </div>
-        {currentUser
-          ? <></>
-          : <button onClick={signIn}>Log in</button>
-        }
-      </header>
       {currentUser
         ? <NavigationBar
           contract={contract}
           currentUser={currentUser}
           nearConfig={nearConfig}
           wallet={wallet} />
-        : <SignIn />
+        : <>
+          <button onClick={signIn}>Log in</button>
+          <SignIn />
+        </>
       }
     </main >
   );

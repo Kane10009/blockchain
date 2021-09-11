@@ -33,7 +33,7 @@ async function initContract() {
     viewMethods: ['getBooks', 'getReviews', 'getUpvote'],
     // Change methods can modify the state, but you don't receive the returned value when called
     changeMethods: ['clean', 'suggestBook', 'deletedBook', 'deleteReviewsOfBook'
-      , 'upvote', 'addReview', 'editReview', 'deleteReview','upvoteReview'],
+      , 'upvote', 'addReview', 'editReview', 'deleteReview','upvoteReview', 'donate'],
     // Sender is the account ID to initialize transactions.
     // getAccountId() will return empty string if user is still unauthorized
     sender: walletConnection.getAccountId()

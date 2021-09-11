@@ -8,18 +8,48 @@ import NewBook from './NewBook';
 import Review from './Review';
 
 export default function NavigationBar({ contract, currentUser, nearConfig, wallet }) {
+    const signIn = () => {
+        wallet.requestSignIn(
+            nearConfig.contractName,
+            'NEAR Book Store'
+        );
+    };
+
+    const signOut = () => {
+        wallet.signOut();
+        window.location.replace(window.location.origin + window.location.pathname);
+    };
+    console.log(currentUser)
     return (
         <>
             <Router>
                 <div>
-                    <Link to="/blockchain">
-                        Home
-                    </Link>
+                    <div class="top">
+                        <div >
+                            <Link to="/blockchain">
+                                Home
+                            </Link>
 
-                    <Link to="/blockchain/add">
-                        Add Books
-                    </Link>
+                            <Link to="/blockchain/add">
+                                Add Books
+                            </Link>
+                        </div>
+                        <div ></div>
 
+                        <div >
+                            <div>
+                            {currentUser
+                                ? <label class="top-right">{currentUser.accountId}</label>
+                                : <></>
+                            }
+                                <Link onClick={signOut}>Log out</Link>
+                            </div>
+                            {currentUser
+                                ? <></>
+                                : <button onClick={signIn}>Log in</button>
+                            }
+                        </div>
+                    </div >
                     {/* --------------------------------------------------------------- */}
                     <hr />
                     {/* --------------------------------------------------------------- */}
@@ -37,7 +67,7 @@ export default function NavigationBar({ contract, currentUser, nearConfig, walle
                                 wallet={wallet} />
                         </Route>
                         <Route exact
-                                path="/detail/:name">
+                            path="/detail/:name">
                             <Review contract={contract}
                                 currentUser={currentUser}
                                 nearConfig={nearConfig}

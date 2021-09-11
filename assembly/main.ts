@@ -6,6 +6,7 @@ export const reviews = new PersistentUnorderedMap<i32, Review>("review-sm")
 
 export function clean(): void {
   books.clear();
+  // reviews.clear();
 }
 
 export function getBooks(): Book[] {
@@ -38,17 +39,19 @@ function deleteReviewsOfBook(name: string): void {
   }
 }
 
-export function upvote(name: string): void {
+export function upvote(name: string): Book | null {
   assert(books.contains(name), "this book is not existed in my store");
   const book = books.get(name);
   logging.log("upvote: ");
   if (book) {
     const updated = book.up();
     books.set(updated.name, updated);
+    return book;
   }
+  return null;
 }
 
-export function getUpvote(name: string): i32{
+export function getUpvote(name: string): i32 {
   assert(books.contains(name), "this book is not existed in my store");
   const book = books.get(name);
   if (book) {
@@ -59,16 +62,22 @@ export function getUpvote(name: string): i32{
 
 export function getReviews(name: string): Review[] {
   assert(books.contains(name), "this book is not existed in my store");
+
+  logging.log("getReviews name: ".concat(name));
+
   let filtered: Review[] = [];
   const book = books.get(name);
+
   if (book != null) {
     const values = reviews.values();
     for (let i = 0; i < values.length; i++) {
+      logging.log("values[i].name: ".concat(values[i].name).concat(", name: ".concat(name)));
       if (name == values[i].name) {
         filtered.push(values[i]);
       }
     }
   }
+
   return filtered;
 }
 
@@ -106,13 +115,17 @@ export function deleteReview(id: i32): void {
   }
 }
 
-export function upvoteReview(id: i32): void {
+export function upvoteReview(id: i32): Review | null {
   assert(reviews.contains(id), "this content is not existed in my store");
   const review = reviews.get(id);
   if (review != null) {
     const updated = review.upVote();
     reviews.set(id, updated);
+    return review;
+  } else {
+    logging.log("review = null");
   }
+  return null;
 }
 
 // // --- contract code goes below
@@ -146,15 +159,24 @@ export function upvoteReview(id: i32): void {
 //   }
 //   return result;
 // }
-// export const ACCESS_KEY_ALLOWANCE: u128 = u128.from("1000000000000000000000000") // 1 NEAR
-// export function transfer(account_id: string): boolean {
-//   const sender = context.sender;
 
-//   let amount = ACCESS_KEY_ALLOWANCE;
-//   const contractpromist = ContractPromiseBatch.create(account_id);
-//   contractpromist.transfer(amount);
-//   return true;
-// }
+export function donate(id: i32, amount: u128): boolean {
+  assert(reviews.contains(id), "this content is not existed in my store");
+  const review = reviews.get(id);
+
+  if (review) {
+    const receiver = review.reviewer;
+
+    logging.log("donating amount: ".concat(amount.toString()));
+    logging.log("sender: ".concat(context.sender));
+    logging.log("receiver: ".concat(receiver));
+
+    const contractpromist = ContractPromiseBatch.create(receiver);
+    contractpromist.transfer(amount);
+  }
+
+  return true;
+}
 
 // export function getContractBalance(): String {
 //   return context.accountBalance.toString();

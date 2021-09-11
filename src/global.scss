@@ -3,7 +3,7 @@
 }
 
 html {
-  --bg: #fff;
+  --bg: rgb(144, 171, 182);
   --fg: #25282A;
   --gray: #888;
   --royal: #0072CE;
@@ -24,7 +24,7 @@ html {
   }
 
   @media (prefers-color-scheme: dark) {
-    --bg: #25282A;
+    --bg: rgb(144, 171, 182);
     --fg: #fff;
     --secondary: var(--blue);
 
@@ -38,7 +38,7 @@ html {
 body {
   margin: 0 auto;
   padding: 0 1em;
-  max-width: 40em;
+  max-width: 60em;
 }
 
 fieldset {
@@ -65,14 +65,15 @@ label {
 }
 
 button, .highlight {
-  border-radius: 5px;
-  border-color: var(--primary);
-  border: 0.1em solid var(--primary);
-  padding: 0.5em 1em;
+  // border-radius: 5px;
+  border-color: transparent;
+  // border: 0.1em solid var(--primary);
+  // padding: 0.5em 1em;
+  text-align: left;
 
-  &:hover, &:focus, &:focus-within {
-    border-color: var(--secondary);
-  }
+  // &:hover, &:focus, &:focus-within {
+  //   border-color: var(--secondary);
+  // }
 }
 
 input {
@@ -85,8 +86,9 @@ input {
 
 input[type="number"] {
   text-align: center;
-  border-bottom: 0.1em solid var(--primary);
-  margin: 0 1em;
+  border: 0.1em solid var(--primary);
+  margin: 4px;
+  border-radius: 4px;
   width: 4em;
   padding-left: 0.5em;
   &:hover, &:focus {
@@ -96,7 +98,7 @@ input[type="number"] {
 
 button, input {
   background: transparent;
-  color: inherit;
+  color: rgb(80, 77, 77);
   cursor: pointer;
   font: inherit;
   outline: none;
@@ -105,12 +107,13 @@ button, input {
 button {
   position: relative;
   transition: top 50ms;
-  &:hover, &:focus {
+  &:hover{
     top: -1px;
+    color: black;
   }
   &:active {
-    background: var(--secondary);
-    border-color: var(--secondary);
+    background: transparent;
+    border-color: transparent;
     top: 1px;
   }
 }
@@ -149,4 +152,130 @@ a:link, a:visited {
 
 .bookintro {
   font-size: 16px;
+}
+
+
+
+// <style>
+// * {
+//   box-sizing: border-box;
+// }
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Style the header */
+header {
+  background-color: #f1f1f1;
+  text-align: left;
+  font-size: 25px;
+  color: 777;
+  margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+/* Create two columns/boxes that floats next to each other */
+nav {
+  float: left;
+  width: 30%;
+  height: 300px; /* only for demonstration, should be removed */
+  background: #ccc;
+}
+
+/* Style the list inside the menu */
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.content {
+  float: left;
+  width: 100%;
+  background-color: #f1f1f1;
+  height: 300px; /* only for demonstration, should be removed */
+}
+
+/* Clear floats after the columns */
+section::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Style the footer */
+footer {
+  background-color: #f1f1f1;
+  text-align: left;
+  color: 777;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  background-color: #455363;
+}
+
+.top.wrapper > div {
+  flex: 1;
+}
+
+.box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.box2 {
+  background-color: black;
+}
+
+.top-right {
+  background-color: #455363;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+
+  &:hover, &:focus, &:focus-within {
+    border-color: var(--secondary);
+  }
+}
+
+.bookItem{
+  background-color: #ddb15e;
+  margin-top: 0px;
+}
+
+.reviewItem{
+  background-color: #a0e280;
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
+.btn2 {
+  font-weight: bold;
+  font-size: 1em;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  color: #4b4646;
+  display: inline-block;
+  padding: 2px 8px 2px 8px;
+  position: relative;
+  border: 2px solid #2c2929;
+  background-color: #a0e280;
+  border-radius: 4px;
+}
+
+#noNear {
+  border: 1px solid #2c2929;
+  border-radius: 4px;
+  margin-left: 4px;
+  margin-right: 4px;
+  width: 60px;
+  padding-left: 6px;
+  &:read-only {
+    color: var(--primary)
+  }
 }
