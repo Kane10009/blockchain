@@ -131,7 +131,7 @@ export default function AllBooks({ contract, currentUser, nearConfig, wallet }) 
     function renderReviews() {
         return (
             <div style={{ width: '70%', height: 400, marginLeft: 20 }}>
-                <textarea id="newReview" onChange={onTextChanged} style={{ width: '100%', height: 100, borderRadius: 5, boxShadow: `1px 3px 1px #9E9E9E`, padding: 10 }}></textarea>
+                <textarea id="newReview" onChange={onTextChanged} style={{ width: '100%', fontSize: 14, height: 100, borderRadius: 5, boxShadow: `1px 3px 1px #9E9E9E`, padding: 10 }}></textarea>
 
                 <button onClick={onAddReview} style={isEditingReview ? { display: 'none' } : { display: 'inline' }}>Add_Review</button>
                 {/* <button onClick={onClean} >Clean</button> */}

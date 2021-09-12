@@ -74,24 +74,23 @@ export default function BookItem({ book, contract, setCurentBook, currentUser, s
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#e3a754', borderRadius: 5, boxShadow: `1px 3px 1px #9E9E9E`, padding: 10 }}>
-
+{/* 
       <div style={{ width: '20%' }}>
-        <img src={require("../assets/img/book.jpeg")} style={{ width: '100%', height: '60px', borderRadius: 10, boxShadow: `1px 3px 1px #9E9E9E` }}></img>
-      </div>
-      <div style={{ width: '75%' }}>
-        <button onClick={onDetail} style={{ width: '100%', height: 'auto', marginLeft: 0 }}>
+        <img src={`${process.env.PUBLIC_URL}/assets/img/book.jpeg`} style={{ width: '100%', height: '60px', borderRadius: 10, boxShadow: `1px 3px 1px #9E9E9E` }}></img>
+      </div> */}
+      <div style={{ width: '90%' }}>
+        <div onClick={onDetail} style={{ width: '100%', height: 'auto', marginLeft: 0 }}>
           <div className="bookname">
             {book.name}
           </div>
           <div className="bookauthor">
-            {book.author}
           </div>
           <div className="bookintro">
             {book.introduction}
           </div>
 
           {/* <button onClick={onUpvote}>Upvote({upvote})</button> */}
-        </button>
+        </div>
 
         <div style={{ marginTop: 10, marginLeft: 10 }} onClick={onUpvote}>
           {<AiOutlineLike color={active ? 'blue' : 'black'} ></AiOutlineLike>}
@@ -101,7 +100,7 @@ export default function BookItem({ book, contract, setCurentBook, currentUser, s
 
       <div style={{ width: '5%' }}>
         <div className="dropdown2">
-          <span>...</span>
+          <span style={{ color: 'black'}}>...</span>
           <div className="dropdown-content2">
             <button onClick={onDeleteClicked}>Delete</button>
           </div>

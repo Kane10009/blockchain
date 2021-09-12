@@ -82,7 +82,7 @@ export default function Review({ contract, currentUser, nearConfig, wallet, revi
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <div style={{ color: 'gray'}}>{reviewItem.reviewer}</div>
                 <div className="dropdown">
-                    <span>...</span>
+                    <span style={{ color: 'black'}}>...</span>
                     <div className="dropdown-content">
                         <button onClick={onEditClicked}>Edit</button>
                         <button onClick={onDeleteClicked}>Delete</button>
@@ -90,7 +90,7 @@ export default function Review({ contract, currentUser, nearConfig, wallet, revi
                 </div>
             </div>
 
-            <div style={{ minHeight: 100, fontSize: 14, paddingLeft:12, paddingTop:6 }}>
+            <div style={{ minHeight: 100, fontSize: 14, paddingLeft:12, paddingTop:6,color: 'black'  }}>
                 {reviewItem.content}
             </div>
             <div style={{ position: 'relative', bottom: 0, left: 0, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
