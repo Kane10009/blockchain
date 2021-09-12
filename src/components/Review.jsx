@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import Big from 'big.js';
 import { useLocation, Link } from "react-router-dom";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
+
+const BOATLOAD_OF_GAS = Big(10).times(10 ** 13).toFixed();
+const ZERO_DONATION  = Big(0).times(10 ** 24).toFixed();
+
 export default function Review({ contract, currentUser, nearConfig, wallet, reviewItem }) {
     const [upvoteNo, setUpvoteNo] = useState(0);
     const [upvoted, setUpvoted] = useState(false);
@@ -19,12 +23,10 @@ export default function Review({ contract, currentUser, nearConfig, wallet, revi
 
     const onUpvote = (e) => {
         e.preventDefault();
-        console.log("ReviewItem onUpvote clicked  ");
+        console.log("[FRONT-END] ReviewItem onUpvote clicked  ");
 
         contract.upvoteReview({ id: reviewItem.id }
         ).then((rev) => {
-            console.log("'''''''''''''''''rev'''''''''''''''''");
-            console.log(rev);
             if (rev) {
                 setUpvoteNo(rev.upvotes.length);
                 var flag = false;
@@ -33,24 +35,22 @@ export default function Review({ contract, currentUser, nearConfig, wallet, revi
                         flag = true;
                     }
                 }
-                console.log(flag);
                 setUpvoted(flag);
 
             } else {
-                console.log("ReviewItem onUpvote: reviewItem null");
+                console.log("[FRONT-END] ReviewItem onUpvote: reviewItem null");
             }
 
         });
     };
 
-    const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
     const onDonateChanged = (e) => {
         setdonate(e.target.value);
     }
 
 
     const onDonateClicked = (e) => {
-        console.log("Donate:== ".concat(donate));
+        console.log("[FRONT-END] donate amount : ", donate);
         contract.donate({ id: reviewItem.id, amount: Big(donate).times(10 ** 24).toFixed() },
         BOATLOAD_OF_GAS,
         Big(donate).times(10 ** 24).toFixed())
@@ -75,7 +75,7 @@ export default function Review({ contract, currentUser, nearConfig, wallet, revi
                 </div>
 
                 <div>
-                    <button class="btn2" onClick={onDonateClicked}>Donate</button>
+                    <button className="btn2" onClick={onDonateClicked}>Donate</button>
                     {/* <input type="text" id="noNear" ></input> */}
                     <input id="noNear"
                         autoComplete="off"

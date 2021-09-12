@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Big from 'big.js';
 
+const BOATLOAD_OF_GAS = Big(10).times(10 ** 13).toFixed();
+const ZERO_DONATION  = Big(0).times(10 ** 24).toFixed();
+
 export default function NewBook({ contract, currentUser, nearConfig, wallet }) {
     const onSubmit = (e) => {
         e.preventDefault();
@@ -9,11 +12,9 @@ export default function NewBook({ contract, currentUser, nearConfig, wallet }) {
         const { fieldset, name, auth, intro } = e.target.elements;
 
         fieldset.disabled = true;
-        console.log('name', name.value);
-        console.log('author', auth.value);
-        console.log('intro', intro.value);
+        console.log('[FRONT-END] Add new book: name', name.value,", author: ", auth.value,", intro: ", intro.value);
 
-        contract.suggestBook({ name: name.value, intro: intro.value, auth: auth.value }
+        contract.suggestBook({ name: name.value, intro: intro.value, auth: auth.value }, BOATLOAD_OF_GAS, ZERO_DONATION
         ).then(() => {
             name.value = '';
             intro.value = '';
@@ -47,13 +48,15 @@ export default function NewBook({ contract, currentUser, nearConfig, wallet }) {
                 </p>
                 <p className="highlight">
                     <label htmlFor="intro">Intro:</label>
-                    <input
+
+                    <textarea id="intro" name="newReview" style={{ width: '100%',  height: 200 , borderColor:'transparent',  borderRadius: 0, padding: 10 , backgroundColor: 'transparent'}}></textarea>
+                    {/* <textarea
                         type="textarea"
                         autoComplete="off"
                         autoFocus
                         id="intro"
                         required
-                    />
+                    /> */}
                 </p>
 
                 <button type="submit" >
@@ -65,7 +68,7 @@ export default function NewBook({ contract, currentUser, nearConfig, wallet }) {
 }
 
 NewBook.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
+    // onSubmit: PropTypes.func.isRequired,
     currentUser: PropTypes.shape({
         accountId: PropTypes.string.isRequired,
         balance: PropTypes.string.isRequired

@@ -56,15 +56,24 @@ fieldset {
     margin-right: 0.5em;
   }
   input {
-    caret-color: var(--secondary);
+    caret-color: #899096;
   }
+
+  border-radius: 5px;
+  border-color: rgb(92, 91, 91);
+  border: 0.1em solid rgb(92, 91, 91);
+  padding: 0.5em 1em;
+
+  // &:hover, &:focus, &:focus-within {
+  //   border-color: rgb(224, 209, 209);
+  // }
 }
 
 label {
-  color: var(--gray);
+  color: rgb(70, 63, 63);
 }
 
-button, .highlight {
+button {
   // border-radius: 5px;
   border-color: transparent;
   // border: 0.1em solid var(--primary);
@@ -277,5 +286,21 @@ footer {
   padding-left: 6px;
   &:read-only {
     color: var(--primary)
+  }
+}
+
+#btlogout {
+  background-color: #455363;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin-left: 20px;
+
+  &:hover, &:focus, &:focus-within {
+    border-color: var(--secondary);
   }
 }

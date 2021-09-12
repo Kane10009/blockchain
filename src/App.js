@@ -11,8 +11,8 @@ import NewBook from './components/NewBook';
 import AllBooks from './components/AllBooks';
 import BookItem from './components/BookItem';
 
-const SUGGESTED_DONATION = '0';
-const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
+export const BOATLOAD_OF_GAS = Big(10).times(10 ** 13).toFixed();
+export const ZERO_DONATION  = Big(0).times(10 ** 24).toFixed();
 
 const App = ({ contract, currentUser, nearConfig, wallet }) => {
   // const [messages, setMessages] = useState([]);
@@ -27,11 +27,6 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
       nearConfig.contractName,
       'NEAR Book Store'
     );
-  };
-
-  const signOut = () => {
-    wallet.signOut();
-    window.location.replace(window.location.origin + window.location.pathname);
   };
 
   return (

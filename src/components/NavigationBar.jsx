@@ -19,12 +19,12 @@ export default function NavigationBar({ contract, currentUser, nearConfig, walle
         wallet.signOut();
         window.location.replace(window.location.origin + window.location.pathname);
     };
-    console.log(currentUser)
+    console.log("[FRONT-END] currentUser: ",currentUser.accountId);
     return (
         <>
             <Router>
                 <div>
-                    <div class="top">
+                    <div className="top">
                         <div >
                             <Link to="/blockchain">
                                 Home
@@ -39,10 +39,10 @@ export default function NavigationBar({ contract, currentUser, nearConfig, walle
                         <div >
                             <div>
                             {currentUser
-                                ? <label class="top-right">{currentUser.accountId}</label>
+                                ? <label style={{ color:'#FFFA' }}>{currentUser.accountId}</label>
                                 : <></>
                             }
-                                <Link onClick={signOut}>Log out</Link>
+                                <button id='btlogout' onClick={signOut}>Log out</button>
                             </div>
                             {currentUser
                                 ? <></>
@@ -81,7 +81,6 @@ export default function NavigationBar({ contract, currentUser, nearConfig, walle
 }
 
 NavigationBar.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
     currentUser: PropTypes.shape({
         accountId: PropTypes.string.isRequired,
         balance: PropTypes.string.isRequired

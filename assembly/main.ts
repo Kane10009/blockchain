@@ -5,25 +5,34 @@ export const books = new PersistentUnorderedMap<string, Book>("book-sm");
 export const reviews = new PersistentUnorderedMap<i32, Review>("review-sm")
 
 export function clean(): void {
+  logging.log("[BE-AS] clean all books");
   books.clear();
   // reviews.clear();
+  logbreak();
 }
 
 export function getBooks(): Book[] {
+  logging.log("[BE-AS] get all books");
+  logbreak();
   return books.values();
+
 }
 
 export function suggestBook(name: string, intro: string, auth: string): void {
+  logging.log("[BE-AS] add new book name: ".concat(name));
   assert(!books.contains(name), "this book is suggested before, please check");
 
   const book = new Book(name, intro, auth);
   books.set(name, book);
+  logbreak();
 }
 
 export function deletedBook(name: string): void {
+  logging.log("[BE-AS] delete book name: ".concat(name));
   assert(books.contains(name), "this book is not exist, please check");
   books.delete(name);
   deleteReviewsOfBook(name);
+  logbreak();
 }
 
 function deleteReviewsOfBook(name: string): void {
@@ -37,12 +46,14 @@ function deleteReviewsOfBook(name: string): void {
       }
     }
   }
+  
 }
 
 export function upvote(name: string): Book | null {
+  logging.log("[BE-AS] upvote book name: ".concat(name));
+  logbreak();
   assert(books.contains(name), "this book is not existed in my store");
   const book = books.get(name);
-  logging.log("upvote: ");
   if (book) {
     const updated = book.up();
     books.set(updated.name, updated);
@@ -52,6 +63,8 @@ export function upvote(name: string): Book | null {
 }
 
 export function getUpvote(name: string): i32 {
+  logging.log("[BE-AS] get Upvote of book: ".concat(name));
+  logbreak();
   assert(books.contains(name), "this book is not existed in my store");
   const book = books.get(name);
   if (book) {
@@ -61,9 +74,9 @@ export function getUpvote(name: string): i32 {
 }
 
 export function getReviews(name: string): Review[] {
+  logging.log("[BE-AS] get reviews of book: ".concat(name));
+  logbreak();
   assert(books.contains(name), "this book is not existed in my store");
-
-  logging.log("getReviews name: ".concat(name));
 
   let filtered: Review[] = [];
   const book = books.get(name);
@@ -71,7 +84,6 @@ export function getReviews(name: string): Review[] {
   if (book != null) {
     const values = reviews.values();
     for (let i = 0; i < values.length; i++) {
-      logging.log("values[i].name: ".concat(values[i].name).concat(", name: ".concat(name)));
       if (name == values[i].name) {
         filtered.push(values[i]);
       }
@@ -81,7 +93,10 @@ export function getReviews(name: string): Review[] {
   return filtered;
 }
 
-export function addReview(name: string, content: string): void {
+export function addReview(name: string, content: string): Review[] {
+  logging.log("[BE-AS] add reviews of book: ".concat(name));
+  logbreak();
+
   assert(books.contains(name), "this book is not existed in my store");
   const book = books.get(name);
   if (book) {
@@ -92,9 +107,23 @@ export function addReview(name: string, content: string): void {
     reviewId = reviewId + 1;
     storage.set<i32>("reviewId", reviewId);
   }
+
+  let filtered: Review[] = [];
+  if (book != null) {
+    const values = reviews.values();
+    for (let i = 0; i < values.length; i++) {
+      if (name == values[i].name) {
+        filtered.push(values[i]);
+      }
+    }
+  }
+
+  return filtered;
 }
 
 export function editReview(id: i32, content: string): void {
+  logging.log("[BE-AS] edit review id: ".concat(id.toString()));
+  logbreak();
   assert(reviews.contains(id), "this content is not existed in my store");
   const review = reviews.get(id);
   if (review != null) {
@@ -106,6 +135,8 @@ export function editReview(id: i32, content: string): void {
 }
 
 export function deleteReview(id: i32): void {
+  logging.log("[BE-AS] delete review id: ".concat(id.toString()));
+  logbreak();
   assert(reviews.contains(id), "this content is not existed in my store");
   const review = reviews.get(id);
   if (review != null) {
@@ -116,6 +147,8 @@ export function deleteReview(id: i32): void {
 }
 
 export function upvoteReview(id: i32): Review | null {
+  logging.log("[BE-AS] upvote review id: ".concat(id.toString()));
+  logbreak();
   assert(reviews.contains(id), "this content is not existed in my store");
   const review = reviews.get(id);
   if (review != null) {
@@ -166,16 +199,18 @@ export function donate(id: i32, amount: u128): boolean {
 
   if (review) {
     const receiver = review.reviewer;
-
-    logging.log("donating amount: ".concat(amount.toString()));
-    logging.log("sender: ".concat(context.sender));
-    logging.log("receiver: ".concat(receiver));
+    logging.log("[BE-AS] donate sender: ".concat(context.sender).concat(", receiver: ").concat(receiver).concat(", amount: ").concat(amount.toString()));
+    logbreak();
 
     const contractpromist = ContractPromiseBatch.create(receiver);
     contractpromist.transfer(amount);
   }
 
   return true;
+}
+
+function logbreak() : void {
+  logging.log("------------------------------------------");
 }
 
 // export function getContractBalance(): String {

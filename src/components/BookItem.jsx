@@ -21,12 +21,10 @@ export default function BookItem({ book, contract, setCurentBook, currentUser })
 
   const onUpvote = (e) => {
     e.preventDefault();
-    console.log("onUpvote: book.name ");
+    console.log("[FRONT-END] onUpvote: ", book.name);
 
     contract.upvote({ name: book.name }
     ).then((book) => {
-      console.log("'''''''''''''''''book'''''''''''''''''");
-      console.log(book);
       if(book){
         setupvote(book.upvotes.length);
         var flag = false;
@@ -38,7 +36,7 @@ export default function BookItem({ book, contract, setCurentBook, currentUser })
         setActive(flag);
 
       }else{
-        console.log("onUpvote: book null");
+        console.log("[FRONT-END] onUpvote: book null");
       }
       
     });
@@ -51,18 +49,18 @@ export default function BookItem({ book, contract, setCurentBook, currentUser })
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#e3a754', borderRadius: 5, boxShadow: `1px 3px 1px #9E9E9E`, padding: 10 }}>
-      <div style={{ width: '25%' }}>
-        <img src={bookimg} style={{ width: '100%', height: '100%', borderRadius: 10, boxShadow: `1px 3px 1px #9E9E9E` }}></img>
+      <div style={{ width: '20%' }}>
+        <img src={bookimg} style={{ width: '100%', height: '60px', borderRadius: 10, boxShadow: `1px 3px 1px #9E9E9E` }}></img>
       </div>
       <div style={{ width: '75%' }}>
         <button onClick={onDetail} style={{ width: '100%', height: 'auto', marginLeft: 0 }}>
-          <div class="bookname">
+          <div className="bookname">
             {book.name}
           </div>
-          <div class="bookauthor">
+          <div className="bookauthor">
             {book.author}
           </div>
-          <div class="bookintro">
+          <div className="bookintro">
             {book.introduction}
           </div>
 
