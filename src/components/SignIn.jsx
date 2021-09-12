@@ -9,9 +9,8 @@ export default function SignIn() {
           to design, develop, test and deploy smart contracts on the NEAR platform – NEAR Certified Developer (NCD)
       </p>
       <p>
-          About the NEAR book store
-          The idea about this project is a comunity book store where all will share money to buy book. 
-          Community will together vote to buy book, share the reviews ...
+          About the NEAR book Review
+          Community will together vote to good book, share the reviews ...
       </p>
     </>
   );

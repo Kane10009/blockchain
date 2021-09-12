@@ -81,7 +81,7 @@
       "last 1 safari version"
     ]
   },
-  "description": "Near Book Store (refered from \"Guest book\" project)",
+  "description": "Near Book Review (refered from \"Guest book\" project)",
   "main": "as-pect.config.js",
   "repository": {
     "type": "git",

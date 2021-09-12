@@ -1,4 +1,4 @@
-Near Book Store (refered from "Guest book" project)
+Near Book Review (refered from "Guest book" project)
 
 Quick Start
 ===========

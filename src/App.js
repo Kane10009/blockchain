@@ -11,8 +11,7 @@ import NewBook from './components/NewBook';
 import AllBooks from './components/AllBooks';
 import BookItem from './components/BookItem';
 
-export const BOATLOAD_OF_GAS = Big(10).times(10 ** 13).toFixed();
-export const ZERO_DONATION  = Big(0).times(10 ** 24).toFixed();
+
 
 const App = ({ contract, currentUser, nearConfig, wallet }) => {
   // const [messages, setMessages] = useState([]);
@@ -25,7 +24,7 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
   const signIn = () => {
     wallet.requestSignIn(
       nearConfig.contractName,
-      'NEAR Book Store'
+      'NEAR Book Review'
     );
   };
 

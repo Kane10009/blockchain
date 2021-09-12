@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Big from 'big.js';
 import { BrowserRouter as Router, Route, Switch, Link, withRouter } from "react-router-dom";
-import bookimg from '../assets/img/book.jpeg'
+// import { bookimg } from '../assets/img/book.jpeg';
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import NewBook from './NewBook';
 
@@ -76,7 +76,7 @@ export default function BookItem({ book, contract, setCurentBook, currentUser, s
     <div style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#e3a754', borderRadius: 5, boxShadow: `1px 3px 1px #9E9E9E`, padding: 10 }}>
 
       <div style={{ width: '20%' }}>
-        <img src={bookimg} style={{ width: '100%', height: '60px', borderRadius: 10, boxShadow: `1px 3px 1px #9E9E9E` }}></img>
+        <img src={require("../assets/img/book.jpeg")} style={{ width: '100%', height: '60px', borderRadius: 10, boxShadow: `1px 3px 1px #9E9E9E` }}></img>
       </div>
       <div style={{ width: '75%' }}>
         <button onClick={onDetail} style={{ width: '100%', height: 'auto', marginLeft: 0 }}>

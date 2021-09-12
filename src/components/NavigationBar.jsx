@@ -11,7 +11,7 @@ export default function NavigationBar({ contract, currentUser, nearConfig, walle
     const signIn = () => {
         wallet.requestSignIn(
             nearConfig.contractName,
-            'NEAR Book Store'
+            'NEAR Book Review'
         );
     };
 
