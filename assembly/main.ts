@@ -27,12 +27,15 @@ export function suggestBook(name: string, intro: string, auth: string): void {
   logbreak();
 }
 
-export function deletedBook(name: string): void {
+export function deletedBook(name: string): Book[] {
   logging.log("[BE-AS] delete book name: ".concat(name));
   assert(books.contains(name), "this book is not exist, please check");
   books.delete(name);
+  
   deleteReviewsOfBook(name);
   logbreak();
+  
+  return books.values();
 }
 
 function deleteReviewsOfBook(name: string): void {
@@ -46,7 +49,6 @@ function deleteReviewsOfBook(name: string): void {
       }
     }
   }
-  
 }
 
 export function upvote(name: string): Book | null {
@@ -121,29 +123,52 @@ export function addReview(name: string, content: string): Review[] {
   return filtered;
 }
 
-export function editReview(id: i32, content: string): void {
+export function editReview(id: i32, content: string): Review[] {
   logging.log("[BE-AS] edit review id: ".concat(id.toString()));
   logbreak();
   assert(reviews.contains(id), "this content is not existed in my store");
   const review = reviews.get(id);
+  let filtered: Review[] = [];
+
   if (review != null) {
     review.content = content;
     reviews.set(id, review);
+
+    const values = reviews.values();
+    for (let i = 0; i < values.length; i++) {
+      if (review.name == values[i].name) {
+        filtered.push(values[i]);
+      }
+    }
+
   } else {
     logging.log("editReview : not found the review id");
   }
+  return filtered;
 }
 
-export function deleteReview(id: i32): void {
+export function deleteReview(id: i32): Review[] {
   logging.log("[BE-AS] delete review id: ".concat(id.toString()));
   logbreak();
   assert(reviews.contains(id), "this content is not existed in my store");
   const review = reviews.get(id);
+  let filtered: Review[] = [];
+
   if (review != null) {
     reviews.delete(id);
+
+    const values = reviews.values();
+    for (let i = 0; i < values.length; i++) {
+      if (review.name == values[i].name) {
+        filtered.push(values[i]);
+      }
+    }
+
   } else {
     logging.log("deleteReview : not found the review id");
   }
+
+  return filtered;
 }
 
 export function upvoteReview(id: i32): Review | null {
@@ -209,7 +234,7 @@ export function donate(id: i32, amount: u128): boolean {
   return true;
 }
 
-function logbreak() : void {
+function logbreak(): void {
   logging.log("------------------------------------------");
 }
 

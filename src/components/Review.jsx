@@ -5,9 +5,9 @@ import { useLocation, Link } from "react-router-dom";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 
 const BOATLOAD_OF_GAS = Big(10).times(10 ** 13).toFixed();
-const ZERO_DONATION  = Big(0).times(10 ** 24).toFixed();
+const ZERO_DONATION = Big(0).times(10 ** 24).toFixed();
 
-export default function Review({ contract, currentUser, nearConfig, wallet, reviewItem }) {
+export default function Review({ contract, currentUser, nearConfig, wallet, reviewItem, setReviews, setReviewContent, setIsEditingReview, setCurentReview }) {
     const [upvoteNo, setUpvoteNo] = useState(0);
     const [upvoted, setUpvoted] = useState(false);
     const [donate, setdonate] = useState(0.1);
@@ -52,20 +52,45 @@ export default function Review({ contract, currentUser, nearConfig, wallet, revi
     const onDonateClicked = (e) => {
         console.log("[FRONT-END] donate amount : ", donate);
         contract.donate({ id: reviewItem.id, amount: Big(donate).times(10 ** 24).toFixed() },
-        BOATLOAD_OF_GAS,
-        Big(donate).times(10 ** 24).toFixed())
+            BOATLOAD_OF_GAS,
+            ZERO_DONATION);
+    }
+
+    const onDeleteClicked = (e) => {
+        console.log("[FRONT-END] delete review id: ", reviewItem.id);
+
+        contract.deleteReview({ id: reviewItem.id },
+            BOATLOAD_OF_GAS,
+            ZERO_DONATION).then((reviews) => {
+                if (reviews) {
+                    setReviews(reviews);
+                }
+            });
+    }
+
+    const onEditClicked = (e) => {
+        console.log("[FRONT-END] edit review id: ", reviewItem.id);
+        console.log("[FRONT-END] edit review content: ", reviewItem.content);
+
+        setReviewContent(reviewItem.content);
+        setCurentReview(reviewItem);
+        setIsEditingReview(true);
     }
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10, backgroundColor: 'white', borderRadius: 5, boxShadow: `1px 3px 1px #9E9E9E`, padding: 10 }}>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                <div>{reviewItem.reviewer}</div>
-                <div>
-                    dropbox
+                <div style={{ color: 'gray'}}>{reviewItem.reviewer}</div>
+                <div className="dropdown">
+                    <span>...</span>
+                    <div className="dropdown-content">
+                        <button onClick={onEditClicked}>Edit</button>
+                        <button onClick={onDeleteClicked}>Delete</button>
+                    </div>
                 </div>
             </div>
 
-            <div style={{ minHeight: 100 }}>
+            <div style={{ minHeight: 100, fontSize: 14, paddingLeft:12, paddingTop:6 }}>
                 {reviewItem.content}
             </div>
             <div style={{ position: 'relative', bottom: 0, left: 0, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>

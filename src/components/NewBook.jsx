@@ -49,7 +49,7 @@ export default function NewBook({ contract, currentUser, nearConfig, wallet }) {
                 <p className="highlight">
                     <label htmlFor="intro">Intro:</label>
 
-                    <textarea id="intro" name="newReview" style={{ width: '100%',  height: 200 , borderColor:'transparent',  borderRadius: 0, padding: 10 , backgroundColor: 'transparent'}}></textarea>
+                    <textarea id="intro" name="newReview" style={{ width: '100%',  height: 200 , borderColor:'transparent', borderRadius: 0, padding: 10 , backgroundColor: 'transparent'}}></textarea>
                     {/* <textarea
                         type="textarea"
                         autoComplete="off"
@@ -60,7 +60,7 @@ export default function NewBook({ contract, currentUser, nearConfig, wallet }) {
                 </p>
 
                 <button type="submit" >
-                    Submit
+                    Add
                 </button>
             </fieldset>
         </form>
