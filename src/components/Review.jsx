@@ -4,10 +4,16 @@ import Big from 'big.js';
 import { useLocation, Link } from "react-router-dom";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 
+import { showLoader } from "../actions/application";
+import { hideLoader } from "../actions/application";
+import { useDispatch } from 'react-redux';
+
 const BOATLOAD_OF_GAS = Big(10).times(10 ** 13).toFixed();
 const ZERO_DONATION = Big(0).times(10 ** 24).toFixed();
 
 export default function Review({ contract, currentUser, nearConfig, wallet, reviewItem, setReviews, setReviewContent, setIsEditingReview, setCurentReview }) {
+    const dispatch = useDispatch();
+
     const [upvoteNo, setUpvoteNo] = useState(0);
     const [upvoted, setUpvoted] = useState(false);
     const [donate, setdonate] = useState(0.1);
@@ -25,8 +31,12 @@ export default function Review({ contract, currentUser, nearConfig, wallet, revi
         e.preventDefault();
         console.log("[FRONT-END] ReviewItem onUpvote clicked  ");
 
+        dispatch(showLoader());
+
         contract.upvoteReview({ id: reviewItem.id }
         ).then((rev) => {
+            dispatch(hideLoader());
+
             if (rev) {
                 setUpvoteNo(rev.upvotes.length);
                 var flag = false;
@@ -51,13 +61,25 @@ export default function Review({ contract, currentUser, nearConfig, wallet, revi
 
     const onDonateClicked = (e) => {
         console.log("[FRONT-END] donate amount : ", donate);
-        contract.donate({ id: reviewItem.id, amount: Big(donate).times(10 ** 24).toFixed() },
+
+        dispatch(showLoader());
+
+        try{
+            contract.donate({ id: reviewItem.id, amount: Big(donate).times(10 ** 24).toFixed() },
             BOATLOAD_OF_GAS,
-            ZERO_DONATION);
+            Big(donate).times(10 ** 24).toFixed()).then(()=>{
+                dispatch(hideLoader());
+            });
+        }catch(e){
+            console.log("[FRONT-END] Exception : ", e);
+            dispatch(hideLoader());
+        }
     }
 
     const onDeleteClicked = (e) => {
         console.log("[FRONT-END] delete review id: ", reviewItem.id);
+
+        dispatch(showLoader());
 
         contract.deleteReview({ id: reviewItem.id },
             BOATLOAD_OF_GAS,
@@ -65,6 +87,8 @@ export default function Review({ contract, currentUser, nearConfig, wallet, revi
                 if (reviews) {
                     setReviews(reviews);
                 }
+            }).then(()=>{
+                dispatch(hideLoader());
             });
     }
 

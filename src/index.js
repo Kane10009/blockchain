@@ -4,6 +4,9 @@ import App from './App';
 import getConfig from './config.js';
 import * as nearAPI from 'near-api-js';
 
+import { Provider } from "react-redux";
+import configureStore from "./store";
+
 // Initializing contract
 async function initContract() {
   const nearConfig = getConfig(process.env.NODE_ENV || 'testnet');
@@ -33,7 +36,7 @@ async function initContract() {
     viewMethods: ['getBooks', 'getReviews', 'getUpvote'],
     // Change methods can modify the state, but you don't receive the returned value when called
     changeMethods: ['clean', 'suggestBook', 'deletedBook', 'deleteReviewsOfBook'
-      , 'upvote', 'addReview', 'editReview', 'deleteReview','upvoteReview', 'donate'],
+      , 'upvote', 'addReview', 'editReview', 'deleteReview', 'upvoteReview', 'donate'],
     // Sender is the account ID to initialize transactions.
     // getAccountId() will return empty string if user is still unauthorized
     sender: walletConnection.getAccountId()
@@ -45,12 +48,13 @@ async function initContract() {
 window.nearInitPromise = initContract()
   .then(({ contract, currentUser, nearConfig, walletConnection }) => {
     ReactDOM.render(
-      <App
-        contract={contract}
-        currentUser={currentUser}
-        nearConfig={nearConfig}
-        wallet={walletConnection}
-      />,
+      <Provider store={configureStore()}>
+        <App
+          contract={contract}
+          currentUser={currentUser}
+          nearConfig={nearConfig}
+          wallet={walletConnection} />,
+      </Provider>,
       document.getElementById('root')
     );
   });

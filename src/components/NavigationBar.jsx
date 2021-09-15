@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import AllBooks from './AllBooks';
 import NewBook from './NewBook';
 import Review from './Review';
+import FullPageLoader from "./FullPageLoader";
 
 export default function NavigationBar({ contract, currentUser, nearConfig, wallet }) {
     const signIn = () => {
@@ -21,7 +22,7 @@ export default function NavigationBar({ contract, currentUser, nearConfig, walle
     };
     console.log("[FRONT-END] currentUser: ",currentUser.accountId);
     return (
-        <>
+        <div className="wrapper">
             <Router>
                 <div>
                     <div className="top">
@@ -76,7 +77,8 @@ export default function NavigationBar({ contract, currentUser, nearConfig, walle
                     </Switch>
                 </div>
             </Router>
-        </>
+            <FullPageLoader />
+        </div>
     );
 }
 

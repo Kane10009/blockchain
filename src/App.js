@@ -28,6 +28,11 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
     );
   };
 
+  const initialState = {
+    loading: false
+  };
+
+
   return (
     <main>
       {currentUser

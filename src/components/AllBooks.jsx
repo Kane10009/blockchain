@@ -4,10 +4,16 @@ import Big from 'big.js';
 import BookItem from './BookItem';
 import Reviews from './Review';
 
-const BOATLOAD_OF_GAS = Big(10).times(10 ** 13).toFixed();
+import { showLoader } from "../actions/application";
+import { hideLoader } from "../actions/application";
+import { useDispatch } from 'react-redux';
+
+const BOATLOAD_OF_GAS = Big(5).times(10 ** 13).toFixed();
 const ZERO_DONATION = Big(0).times(10 ** 24).toFixed();
 
 export default function AllBooks({ contract, currentUser, nearConfig, wallet }) {
+    const dispatch = useDispatch();
+
     const [books, setBooks] = useState([]);
     const [curentBook, setCurentBook] = useState(null)
     const [curentReview, setCurentReview] = useState(null)
@@ -52,8 +58,13 @@ export default function AllBooks({ contract, currentUser, nearConfig, wallet }) 
 
     const updateReviews = (name) => {
         console.log('[FRONT-END] get reviews of book: ', name);
+        
+        dispatch(showLoader());
+
         contract.getReviews({ name: name }).then(reviews => {
             setReviews(reviews);
+        }).then(()=>{
+            dispatch(hideLoader());
         });
     };
 
@@ -66,10 +77,14 @@ export default function AllBooks({ contract, currentUser, nearConfig, wallet }) 
         console.log('[FRONT-END] ADD new review: ', reviewContent);
 
         if(reviewContent.length > 0){
+            dispatch(showLoader());
+
             contract.addReview({ name: curentBook.name, content: reviewContent },
                 BOATLOAD_OF_GAS,
                 ZERO_DONATION
             ).then((reviews) => {
+                dispatch(hideLoader());
+
                 setReviews(reviews);
                 newReview.value = "";
                 setReviewContent("");
@@ -81,25 +96,33 @@ export default function AllBooks({ contract, currentUser, nearConfig, wallet }) 
     const onClean = (e) => {
         e.preventDefault();
         console.log('[FRONT-END] clean: ', reviewContent);
-
+        dispatch(showLoader());
         contract.clean({},
             BOATLOAD_OF_GAS,
             ZERO_DONATION
-        );
+        ).then(()=>{
+            dispatch(hideLoader());
+        });
     };
 
     const onUpdateReview = (e) => {
         e.preventDefault();
+
+        dispatch(showLoader());
 
         console.log('[FRONT-END] EDIT review id ', curentReview.id, ", reviewContent: ", reviewContent);
         contract.editReview({ id: curentReview.id, content: reviewContent },
             BOATLOAD_OF_GAS,
             ZERO_DONATION
         ).then((reviews) => {
+            dispatch(hideLoader());
+
             setReviews(reviews);
 
             setReviewContent("");
             setIsEditingReview(false);
+
+            // window.location.reload();
         });
     };
 

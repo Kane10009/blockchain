@@ -2,20 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Big from 'big.js';
 
+import { showLoader } from "../actions/application";
+import { hideLoader } from "../actions/application";
+import { useDispatch } from 'react-redux';
+
 const BOATLOAD_OF_GAS = Big(10).times(10 ** 13).toFixed();
-const ZERO_DONATION  = Big(0).times(10 ** 24).toFixed();
+const ZERO_DONATION = Big(0).times(10 ** 24).toFixed();
 
 export default function NewBook({ contract, currentUser, nearConfig, wallet }) {
+    const dispatch = useDispatch();
+
     const onSubmit = (e) => {
         e.preventDefault();
+        dispatch(showLoader());
 
         const { fieldset, name, auth, intro } = e.target.elements;
 
         fieldset.disabled = true;
-        console.log('[FRONT-END] Add new book: name', name.value,", author: ", auth.value,", intro: ", intro.value);
+        console.log('[FRONT-END] Add new book: name', name.value, ", author: ", auth.value, ", intro: ", intro.value);
 
         contract.suggestBook({ name: name.value, intro: intro.value, auth: auth.value }, BOATLOAD_OF_GAS, ZERO_DONATION
         ).then(() => {
+            dispatch(hideLoader());
+
             name.value = '';
             intro.value = '';
             auth.value = '';
@@ -49,7 +58,7 @@ export default function NewBook({ contract, currentUser, nearConfig, wallet }) {
                 <p className="highlight">
                     <label htmlFor="intro">Intro:</label>
 
-                    <textarea id="intro" name="newReview" style={{ width: '100%',  height: 200 , borderColor:'transparent', borderRadius: 0, padding: 10 , backgroundColor: 'transparent'}}></textarea>
+                    <textarea id="intro" name="newReview" style={{ width: '100%', height: 200, borderColor: 'transparent', borderRadius: 0, padding: 10, backgroundColor: 'transparent' }}></textarea>
                     {/* <textarea
                         type="textarea"
                         autoComplete="off"

@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Big from 'big.js';
+import {connect} from 'react-redux';
 import { BrowserRouter as Router, Route, Switch, Link, withRouter } from "react-router-dom";
 // import { bookimg } from '../assets/img/book.jpeg';
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import NewBook from './NewBook';
 
+import { showLoader } from "../actions/application";
+import { hideLoader } from "../actions/application";
+import { useDispatch } from 'react-redux';
+
 const BOATLOAD_OF_GAS = Big(10).times(10 ** 13).toFixed();
 const ZERO_DONATION = Big(0).times(10 ** 24).toFixed();
 
-export default function BookItem({ book, contract, setCurentBook, currentUser, setBooks }) {
+function BookItem({ book, contract, setCurentBook, currentUser, setBooks }) {
+  const dispatch = useDispatch();
+  
   const [upvote, setupvote] = useState([]);
   const [active, setActive] = useState(false)
 
@@ -26,8 +33,11 @@ export default function BookItem({ book, contract, setCurentBook, currentUser, s
     e.preventDefault();
     console.log("[FRONT-END] onUpvote: ", book.name);
 
+    dispatch(showLoader());
     contract.upvote({ name: book.name }
     ).then((book) => {
+
+      dispatch(hideLoader());
       if (book) {
         setupvote(book.upvotes.length);
         var flag = false;
@@ -47,12 +57,16 @@ export default function BookItem({ book, contract, setCurentBook, currentUser, s
 
   const onDeleteClicked = (e) => {
     console.log("[FRONT-END] delete book name: ", book.name);
-
+    
+    dispatch(showLoader());
+    
     contract.deletedBook({ name: book.name },
       BOATLOAD_OF_GAS,
       ZERO_DONATION).then((books) => {
         setCurentBook(null);
         setBooks(books);
+      }).then(()=>{
+        dispatch(hideLoader());
       });
   }
 
@@ -74,7 +88,7 @@ export default function BookItem({ book, contract, setCurentBook, currentUser, s
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#e3a754', borderRadius: 5, boxShadow: `1px 3px 1px #9E9E9E`, padding: 10 }}>
-{/* 
+      {/* 
       <div style={{ width: '20%' }}>
         <img src={`${process.env.PUBLIC_URL}/assets/img/book.jpeg`} style={{ width: '100%', height: '60px', borderRadius: 10, boxShadow: `1px 3px 1px #9E9E9E` }}></img>
       </div> */}
@@ -100,7 +114,7 @@ export default function BookItem({ book, contract, setCurentBook, currentUser, s
 
       <div style={{ width: '5%' }}>
         <div className="dropdown2">
-          <span style={{ color: 'black'}}>...</span>
+          <span style={{ color: 'black' }}>...</span>
           <div className="dropdown-content2">
             <button onClick={onDeleteClicked}>Delete</button>
           </div>
@@ -119,3 +133,7 @@ BookItem.propTypes = {
     balance: PropTypes.string.isRequired
   })
 };
+const mapStateToProps = state => ({})
+export default connect(mapStateToProps)(BookItem);
+
+
