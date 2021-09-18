@@ -224,6 +224,7 @@ export function donate(id: i32, amount: u128): boolean {
 
   if (review) {
     const receiver = review.reviewer;
+    
     logging.log("[BE-AS] donate sender: ".concat(context.sender).concat(", receiver: ").concat(receiver).concat(", amount: ").concat(amount.toString()));
     logbreak();
 

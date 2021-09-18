@@ -8,7 +8,7 @@ import { showLoader } from "../actions/application";
 import { hideLoader } from "../actions/application";
 import { useDispatch } from 'react-redux';
 
-const BOATLOAD_OF_GAS = Big(10).times(10 ** 13).toFixed();
+const BOATLOAD_OF_GAS = Big(20).times(10 ** 13).toFixed();
 const ZERO_DONATION = Big(0).times(10 ** 24).toFixed();
 
 export default function Review({ contract, currentUser, nearConfig, wallet, reviewItem, setReviews, setReviewContent, setIsEditingReview, setCurentReview }) {
